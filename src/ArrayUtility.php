@@ -4,36 +4,33 @@ namespace Rexlabs\UtilityBelt;
 
 class ArrayUtility
 {
-	const REMOVAL_ACTION_DELETE  = "delete";
-	const REMOVAL_ACTION_NULLIFY = "nullify";
+	const REMOVAL_ACTION_DELETE  = 'delete';
+	const REMOVAL_ACTION_NULLIFY = 'nullify';
 
 	/**
 	 * Flatten an array
 	 * @param array $array The array to flatten
 	 * @param string $delimiter The string to join array keys with
-	 * @param int $levels The number of levels of the array to flatten (from the top).
+	 * @param int $levels Optional: The number of levels of the array to flatten (from the top).
 	 * @return array
 	 */
-	public static function flatten(array $array, $delimiter = ".", $levels = null)
+	public static function flatten(array $array, string $delimiter = '.', int $levels = -1): array
 	{
-		if (!isset($levels)) {
-			$levels = -1;
-		}
-		if (!is_array($array) || $levels === 0) {
+		if (!\is_array($array) || $levels === 0) {
 			return $array;
 		}
 		$levels--;
 
 		$final_array = [];
 		foreach ($array as $key => $value) {
-			if (is_array($value)) {
+			if (\is_array($value)) {
 				//check if we have a value and then if the value is an associative array
 				if (!$value) {
 					$final_array[ $key ] = [];
 				} elseif (!self::isAssoc($value)) {
 					//If it's not, we want to keep it as an array but flatten out the sub object...
 					foreach ($value as $_value) {
-						$final_array[ $key ][] = is_array($_value) ? self::flatten($_value, $delimiter, $levels - 1) : $_value;
+						$final_array[ $key ][] = \is_array($_value) ? self::flatten($_value, $delimiter, $levels - 1) : $_value;
 					}
 				} else {
 					//If this is an associative array, we want to flatten it out
@@ -56,12 +53,12 @@ class ArrayUtility
 	 * @param int $levels The maximum height to inflate the array keys to. Leave as null to inflate fully.
 	 * @return array
 	 */
-	public static function inflate(array $array, $delimiter = ".", $levels = null)
-	{
-		if (!is_array($array) || $levels === 0) {
+	public static function inflate(array $array, $delimiter = '.', $levels = null): array
+    {
+		if (!\is_array($array) || $levels === 0) {
 			return $array;
 		}
-		if (!isset($levels)) {
+		if ($levels === null) {
 			$levels = 1000;
 		}
 
@@ -69,9 +66,9 @@ class ArrayUtility
 		foreach ($array as $key => $value) {
 			//Let's work out the key parts and the final key
 			$key_parts = explode($delimiter, $key);
-			if ($levels && count($key_parts) > $levels) {
-				$final_key = implode($delimiter, array_slice($key_parts, $levels));
-				$key_parts = array_slice($key_parts, 0, $levels);
+			if ($levels && \count($key_parts) > $levels) {
+				$final_key = implode($delimiter, \array_slice($key_parts, $levels));
+				$key_parts = \array_slice($key_parts, 0, $levels);
 			} else {
 				$final_key = array_pop($key_parts);
 			}
@@ -79,7 +76,7 @@ class ArrayUtility
 			//Now let's construct the base structure
 			$parent = &$final_array;
 			foreach ($key_parts as $key_part) {
-				if (!isset($parent[ $key_part ]) || !is_array($parent[ $key_part ])) {
+				if (!isset($parent[ $key_part ]) || !\is_array($parent[ $key_part ])) {
 					$parent[ $key_part ] = [];
 				}
 				//change ref to newly created sub array before we loop again.
@@ -105,13 +102,13 @@ class ArrayUtility
 	 */
 	public static function dotRead(array $array = null, $readKey, $default_value = null)
 	{
-		if (!is_array($array)) {
+		if (!\is_array($array)) {
 			return $default_value;
 		}
 		$keys = explode('.', $readKey);
 		$value = $array;
 		foreach ($keys as $key) {
-			if (!is_array($value) || !isset($value[ $key ])) {
+			if (!\is_array($value) || !isset($value[ $key ])) {
 				$value = null;
 				break;
 			}
@@ -135,7 +132,7 @@ class ArrayUtility
      */
     public static function dotWrite(array $array = null, $writeKey, $value = null)
     {
-        if (!is_array($array)) {
+        if (!\is_array($array)) {
             return false;
         }
 
@@ -179,15 +176,15 @@ class ArrayUtility
      * @param string $findKey The key to find e.g. "level1.level2.key"
      * @return boolean True if the key exists (even if the value is null)
      */
-    public static function dotExists(array $array = null, $findKey)
+    public static function dotExists(array $array = null, $findKey): bool
     {
-        if (!is_array($array)) {
+        if (!\is_array($array)) {
             return false;
         }
         $keys = explode('.', $findKey);
         $value = $array;
         foreach ($keys as $key) {
-            if (!is_array($value) || !array_key_exists($key, $value)) {
+            if (!\is_array($value) || !array_key_exists($key, $value)) {
                return false;
             }
             $value = $value[ $key ];
@@ -203,7 +200,7 @@ class ArrayUtility
 	 * @param null $default_value
 	 * @return array
 	 */
-	public static function dotReadProperties(array $array, $keys, $default_value = null)
+	public static function dotReadProperties(array $array, $keys, $default_value = null): array
 	{
 		$result = [];
 		foreach ($keys as $key) {
@@ -220,12 +217,12 @@ class ArrayUtility
 	 *     the start of the string, every occurrence will be stripped
 	 * @return array
 	 */
-	public static function stripKeyPrefix(array $array, $prefix = "_")
+	public static function stripKeyPrefix(array $array, $prefix = '_'): array
 	{
 		$result = [];
 		foreach ($array as $key => $value) {
-			$key = preg_replace("/^({$prefix}+)/", "", $key);
-			if (is_array($value)) {
+			$key = preg_replace("/^({$prefix}+)/", '', $key);
+			if (\is_array($value)) {
 				$result[ $key ] = self::stripKeyPrefix($value, $prefix);
 			} else {
 				$result[ $key ] = $value;
@@ -241,16 +238,16 @@ class ArrayUtility
 	 * @param bool $map_arrays True to also map array values.
 	 * @return array
 	 */
-	public static function mapRecursive(array $array, callable $callback, $map_arrays = false)
+	public static function mapRecursive(array $array, callable $callback, $map_arrays = false): array
 	{
 		foreach ($array as $key => $value) {
-			if (is_array($value) && $map_arrays) {
-				$value = call_user_func_array($callback, [$value, $key, $array]);
+			if (\is_array($value) && $map_arrays) {
+				$value = $callback($value, $key, $array);
 			}
-			if (is_array($value)) {
+			if (\is_array($value)) {
 				$value = self::mapRecursive($value, $callback, $map_arrays);
 			} else {
-				$value = call_user_func_array($callback, [$value, $key, $array]);
+				$value = $callback($value, $key, $array);
 			}
 			$array[ $key ] = $value;
 		}
@@ -265,7 +262,7 @@ class ArrayUtility
 	 *     nullify / clear them instead.
 	 * @return array
 	 */
-	public static function keepKeys(array $array, $keys, $removal_action = self::REMOVAL_ACTION_DELETE)
+	public static function keepKeys(array $array, $keys, $removal_action = self::REMOVAL_ACTION_DELETE): array
 	{
 		//Reuse existing logic
 		return current(CollectionUtility::keepKeys([$array], $keys, $removal_action));
@@ -279,7 +276,7 @@ class ArrayUtility
 	 *     nullify / clear them instead.
 	 * @return array
 	 */
-	public static function removeKeys(array $array, $keys, $removal_action = self::REMOVAL_ACTION_DELETE)
+	public static function removeKeys(array $array, $keys, $removal_action = self::REMOVAL_ACTION_DELETE): array
 	{
 		//Reuse existing logic
 		return current(CollectionUtility::removeKeys([$array], $keys, $removal_action));
@@ -290,9 +287,9 @@ class ArrayUtility
 	 * @param array $array An array to check
 	 * @return bool True if associative (i.e. an object), false otherwise
 	 */
-	public static function isAssoc(array $array)
+	public static function isAssoc(array $array): bool
 	{
-		return array_keys($array) !== range(0, count($array) - 1);
+		return array_keys($array) !== range(0, \count($array) - 1);
 	}
 
 	/**
@@ -301,11 +298,11 @@ class ArrayUtility
 	 * @param callable $callable
 	 * @return array
 	 */
-	public static function map(array $array, callable $callable)
+	public static function map(array $array, callable $callable): array
 	{
 		$return = [];
 		foreach ($array as $k => $v) {
-			$return[] = call_user_func_array($callable, [$v, $k, $array]);
+			$return[] = $callable($v, $k, $array);
 		}
 		return $return;
 	}
