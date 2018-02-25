@@ -1,6 +1,6 @@
 <?php
 
-namespace BkvFoundry\UtilityBelt;
+namespace Rexlabs\UtilityBelt;
 
 class ArrayUtility
 {

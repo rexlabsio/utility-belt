@@ -1,15 +1,15 @@
 {
-  "name": "bkvfoundry/utility-belt",
+  "name": "rexlabs/utility-belt",
   "description": "A set of helpful utilities for working with data, collections (arrays of arrays) and arrays in php",
   "keywords":["collection","filter","array","dot read","nested read","dot syntax", "map recursive","utility","utilities"],
   "autoload": {
     "psr-4":{
-      "BkvFoundry\\UtilityBelt\\":"src/"
+      "Rexlabs\\UtilityBelt\\":"src/"
     }
   },
   "autoload-dev":{
     "psr-4":{
-      "BkvFoundry\\UtilityBelt\\Tests\\":"tests/"
+      "Rexlabs\\UtilityBelt\\Tests\\":"tests/"
     }
   },
   "config": {

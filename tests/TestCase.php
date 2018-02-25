@@ -1,4 +1,4 @@
-<?php namespace BkvFoundry\UtilityBelt\Tests;
+<?php namespace Rexlabs\UtilityBelt\Tests;
 
 use PHPUnit_Framework_TestCase;
 

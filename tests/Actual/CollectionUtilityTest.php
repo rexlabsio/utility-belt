@@ -1,6 +1,6 @@
-<?php namespace BkvFoundry\UtilityBelt\Tests;
+<?php namespace Rexlabs\UtilityBelt\Tests;
 
-use BkvFoundry\UtilityBelt\CollectionUtility;
+use Rexlabs\UtilityBelt\CollectionUtility;
 use Exception;
 
 class CollectionUtilityTest extends TestCase

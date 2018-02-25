@@ -1,8 +1,8 @@
 # UtilityBelt
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/bkvfoundry/utility-belt/master.svg?style=flat-square)](https://travis-ci.org/bkvfoundry/utility-belt)
-[![Coverage Status](https://img.shields.io/coveralls/bkvfoundry/utility-belt/master.svg?style=flat-square)](https://coveralls.io/repos/bkvfoundry/utility-belt/badge.svg?branch=master)
+[![Build Status](https://img.shields.io/travis/rexlabs/utility-belt/master.svg?style=flat-square)](https://travis-ci.org/rexlabs/utility-belt)
+[![Coverage Status](https://img.shields.io/coveralls/rexlabs/utility-belt/master.svg?style=flat-square)](https://coveralls.io/repos/rexlabs/utility-belt/badge.svg?branch=master)
 
 Every time we start a new php project that requires even a small amount of data
 wrangling, we find ourselves re-writing the same helper functions over and over again.
@@ -21,10 +21,10 @@ dependencies or third party packages.
 
 ## Installation
 
-Install the latest version with
+Install the latest version with:
 
 ```
-$ composer require bkvfoundry/utility-belt
+$ composer require rexlabs/utility-belt
 ```
 
 ## CollectionUtility
@@ -468,7 +468,7 @@ Returns the key of the last element in an array.
 Install `UtilityBelt` using Composer.
 
 ```bash
-$ composer require bkvfoundry/utility-belt
+$ composer require rexlabs/utility-belt
 ```
 
 ## Testing
@@ -480,7 +480,7 @@ $ composer test
 
 ## Credits
 - [Alex Babkov](https://github.com/ababkov)
-- [All Contributors](https://github.com/bkvfoundry/utility-belt/graphs/contributors)
+- [All Contributors](https://github.com/rexlabs/utility-belt/graphs/contributors)
 
 ## License
 The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.

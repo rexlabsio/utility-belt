@@ -1,10 +1,10 @@
 <?php
 
-namespace BkvFoundry\UtilityBelt;
+namespace Rexlabs\UtilityBelt;
 
 /**
  * Class CollectionUtility
- * @package BkvFoundry\UtilityBelt
+ * @package Rexlabs\UtilityBelt
  * A utility class designed to help deal with arrays where each entry is an array representing an item
  */
 class CollectionUtility

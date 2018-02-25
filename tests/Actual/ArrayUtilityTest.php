@@ -1,6 +1,6 @@
-<?php namespace BkvFoundry\UtilityBelt\Tests;
+<?php namespace Rexlabs\UtilityBelt\Tests;
 
-use BkvFoundry\UtilityBelt\ArrayUtility;
+use Rexlabs\UtilityBelt\ArrayUtility;
 
 class ArrayUtilityTest extends TestCase
 {

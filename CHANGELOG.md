@@ -2,6 +2,23 @@
 
 All notable changes to ```UtilityBelt``` will be noted in this file.
 
+## 3.0.0
+
+### Breaking Change
+
+UtilityBelt has now been moved to our `rexlabsio` repository.
+This is a breaking change, as it affects the package name and namespace.
+
+The following changes have occurred:
+
+* Repository URL changed:
+  `https://github.com/bkvfoundry/utility-belt` => https://github.com/rexlabsio/utility-belt-php
+* Composer package name changed:
+  `bkvfoundry/utility-belt` => `rexlabs/utility-belt`
+* PHP namespace changed: `BkvFoundry\UtilityBelt` => `Rexlabs\UtilityBelt`
+
+To install `composer require rexlabs/utility-belt:^3.0`
+
 ## 2.2.0
 
 ### Methods Added

@@ -1,10 +1,10 @@
 <?php
 
-namespace BkvFoundry\UtilityBelt;
+namespace Rexlabs\UtilityBelt;
 
 /**
  * Class ObjectUtility
- * @package BkvFoundry\UtilityBelt
+ * @package Rexlabs\UtilityBelt
  */
 class ObjectUtility
 {
