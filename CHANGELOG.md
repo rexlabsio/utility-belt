@@ -4,10 +4,14 @@ All notable changes to ```UtilityBelt``` will be noted in this file.
 
 ## 3.0.0
 
-### Breaking Change
+### Breaking Changes
+
+* Moved to new package and namespace
+* Minimum PHP version is now PHP 7.0
+
+### Repository Change
 
 UtilityBelt has now been moved to our `rexlabsio` repository.
-This is a breaking change, as it affects the package name and namespace.
 
 The following changes have occurred:
 
