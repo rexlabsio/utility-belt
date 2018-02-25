@@ -307,7 +307,9 @@ class ArrayUtilityTest extends TestCase
 			'one' => 'foo',
 		];
 
-		$mock = $this->getMock('stdClass', ['myCallBack']);
+		$mock = $this->getMockBuilder(\stdClass::class)
+            ->setMethods(['myCallback'])
+            ->getMock();
 		$mock->expects($this->once())
 			->method('myCallBack')
 			->will($this->returnValue('test'));
