@@ -438,9 +438,9 @@ class CollectionUtility
     /**
      * Suffles an array in an immutable fashion. Using shuffle directly will reorder the original array
      * @param array $array An array to be shuffled
-     * @return array
+     * @return array|null
      */
-    public static function shuffle(array $array): array
+    public static function shuffle(array $array)
     {
         if (!$array) {
             return null;
