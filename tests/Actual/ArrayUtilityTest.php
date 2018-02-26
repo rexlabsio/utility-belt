@@ -4,115 +4,115 @@ use Rexlabs\UtilityBelt\ArrayUtility;
 
 class ArrayUtilityTest extends TestCase
 {
-	public function testThatArrayIsFlattened()
-	{
-		//setup source array
-		$array = [
-			"a" => [
-				"aa" => "aa value",
-				"bb" => [
-					"aaa" => "aaa value"
-				],
-				"cc" => [],
-				"dd" => [1, 2, ["a" => ["b" => "c"]]]
-			]
-		];
+    public function testThatArrayIsFlattened()
+    {
+        //setup source array
+        $array = [
+            "a" => [
+                "aa" => "aa value",
+                "bb" => [
+                    "aaa" => "aaa value",
+                ],
+                "cc" => [],
+                "dd" => [1, 2, ["a" => ["b" => "c"]]],
+            ],
+        ];
 
-		//Don't flatten at all
-		$result = ArrayUtility::flatten($array, ".", 0);
-		$this->assertEquals($array, $result, "Array must not flatten when level is set to 0");
+        //Don't flatten at all
+        $result = ArrayUtility::flatten($array, ".", 0);
+        $this->assertEquals($array, $result, "Array must not flatten when level is set to 0");
 
-		//Flatten to a certain number of levels
-		$result = ArrayUtility::flatten($array, ".", 1);
-		$this->assertEquals(["aaa" => "aaa value"], $result['a.bb'], "Array must only flatten by one level");
+        //Flatten to a certain number of levels
+        $result = ArrayUtility::flatten($array, ".", 1);
+        $this->assertEquals(["aaa" => "aaa value"], $result['a.bb'], "Array must only flatten by one level");
 
-		//Fully flatten
-		$result = ArrayUtility::flatten($array);
-		$this->assertEquals("aaa value", $result["a.bb.aaa"], "Array must fully flatten");
+        //Fully flatten
+        $result = ArrayUtility::flatten($array);
+        $this->assertEquals("aaa value", $result["a.bb.aaa"], "Array must fully flatten");
 
-		//Full test
-		$result = ArrayUtility::flatten($array);
-		$this->assertEquals([
-			"a.aa" => "aa value",
-			"a.bb.aaa" => "aaa value",
-			"a.cc" => [],
-			"a.dd" => [1, 2, ["a.b" => "c"]]
-		], $result);
-	}
+        //Full test
+        $result = ArrayUtility::flatten($array);
+        $this->assertEquals([
+            "a.aa" => "aa value",
+            "a.bb.aaa" => "aaa value",
+            "a.cc" => [],
+            "a.dd" => [1, 2, ["a.b" => "c"]],
+        ], $result);
+    }
 
-	public function testThatArrayInflates()
-	{
-		//setup source array
-		$array = [
-			"a.aa" => "aa value",
-			"a.bb.aaa" => "aaa value"
-		];
+    public function testThatArrayInflates()
+    {
+        //setup source array
+        $array = [
+            "a.aa" => "aa value",
+            "a.bb.aaa" => "aaa value",
+        ];
 
-		//Don't inflate at all
-		$result = ArrayUtility::inflate($array, ".", 0);
-		$this->assertEquals($array, $result, "Array must not inflate when level is set to 0");
+        //Don't inflate at all
+        $result = ArrayUtility::inflate($array, ".", 0);
+        $this->assertEquals($array, $result, "Array must not inflate when level is set to 0");
 
-		//Inflate to a certain number of levels
-		$result = ArrayUtility::inflate($array, ".", 1);
-		$this->assertEquals([
-			"a" => [
-				"aa" => "aa value",
-				"bb.aaa" => "aaa value"
-			]
-		], $result, "Array must only inflate by one level");
+        //Inflate to a certain number of levels
+        $result = ArrayUtility::inflate($array, ".", 1);
+        $this->assertEquals([
+            "a" => [
+                "aa" => "aa value",
+                "bb.aaa" => "aaa value",
+            ],
+        ], $result, "Array must only inflate by one level");
 
-		//Fully inflate
-		$result = ArrayUtility::inflate($array);
-		$this->assertEquals([
-			"a" => [
-				"aa" => "aa value",
-				"bb" => [
-					"aaa" => "aaa value"
-				]
-			]
-		], $result, "Array must fully inflate");
-	}
+        //Fully inflate
+        $result = ArrayUtility::inflate($array);
+        $this->assertEquals([
+            "a" => [
+                "aa" => "aa value",
+                "bb" => [
+                    "aaa" => "aaa value",
+                ],
+            ],
+        ], $result, "Array must fully inflate");
+    }
 
-	public function testThatPrefixesAreStripped()
-	{
-		$array = [
-			"__a" => "value",
-			"_b" => [
-				"nested" => "value",
-				"_2nd" => "value"
-			]
-		];
-		$expected_output = [
-			"a" => "value",
-			"b" => [
-				"nested" => "value",
-				"2nd" => "value"
-			]
-		];
+    public function testThatPrefixesAreStripped()
+    {
+        $array = [
+            "__a" => "value",
+            "_b" => [
+                "nested" => "value",
+                "_2nd" => "value",
+            ],
+        ];
+        $expected_output = [
+            "a" => "value",
+            "b" => [
+                "nested" => "value",
+                "2nd" => "value",
+            ],
+        ];
 
-		$this->assertEquals($expected_output, ArrayUtility::stripKeyPrefix($array));
-	}
+        $this->assertEquals($expected_output, ArrayUtility::stripKeyPrefix($array));
+    }
 
-	public function testThatADeepPropertyCanBeRead()
-	{
-		//setup source array
-		$array = [
-			"a" => [
-				"aa" => "aa value",
-				"bb" => [
-					"aaa" => "aaa value"
-				]
-			]
-		];
+    public function testThatADeepPropertyCanBeRead()
+    {
+        //setup source array
+        $array = [
+            "a" => [
+                "aa" => "aa value",
+                "bb" => [
+                    "aaa" => "aaa value",
+                ],
+            ],
+        ];
 
-		//try some existing value dot reads
-		$this->assertEquals("aa value", ArrayUtility::dotRead($array, "a.aa"));
-		$this->assertEquals("aaa value", ArrayUtility::dotRead($array, "a.bb.aaa"));
-		$this->assertEquals(["aaa" => "aaa value"], ArrayUtility::dotRead($array, "a.bb"));
+        //try some existing value dot reads
+        $this->assertEquals("aa value", ArrayUtility::dotRead($array, "a.aa"));
+        $this->assertEquals("aaa value", ArrayUtility::dotRead($array, "a.bb.aaa"));
+        $this->assertEquals(["aaa" => "aaa value"], ArrayUtility::dotRead($array, "a.bb"));
 
-		//check default values
-		$this->assertEquals("default value", ArrayUtility::dotRead($array, "c.cc.ccc", "default value"));
-	}
+        //check default values
+        $this->assertEquals("default value", ArrayUtility::dotRead($array, "c.cc.ccc", "default value"));
+    }
 
     public function testExistenceOfADeepProperty()
     {
@@ -121,12 +121,12 @@ class ArrayUtilityTest extends TestCase
             'a' => [
                 'aa' => 'aa value',
                 'bb' => [
-                    'aaa' => 'aaa value'
+                    'aaa' => 'aaa value',
                 ],
                 'xx' => [
                     'yy' => null,
-                ]
-            ]
+                ],
+            ],
         ];
 
         $this->assertTrue(ArrayUtility::dotExists($array, 'a'));
@@ -145,9 +145,9 @@ class ArrayUtilityTest extends TestCase
             'a' => [
                 'aa' => 'aa value',
                 'bb' => [
-                    'aaa' => 'aaa value'
-                ]
-            ]
+                    'aaa' => 'aaa value',
+                ],
+            ],
         ];
 
         // Change existing value
@@ -161,16 +161,16 @@ class ArrayUtilityTest extends TestCase
         $this->assertFalse(ArrayUtility::dotExists($origArray, 'xx.yy'));
     }
 
-	public function testThatADeepPropertyCanBeMutated()
-	{
+    public function testThatADeepPropertyCanBeMutated()
+    {
         // Setup source array
         $array = [
             'a' => [
                 'aa' => 'aa value',
                 'bb' => [
-                    'aaa' => 'aaa value'
-                ]
-            ]
+                    'aaa' => 'aaa value',
+                ],
+            ],
         ];
 
         // Change existing value
@@ -180,245 +180,248 @@ class ArrayUtilityTest extends TestCase
         // Set non-existing value
         ArrayUtility::dotMutate($array, 'xx.yy', 'xx.yy value');
         $this->assertEquals('xx.yy value', ArrayUtility::dotRead($array, 'xx.yy'));
-	}
+    }
 
-	public function testThatAssociativeArrayCanBeDetected()
-	{
-		$assoc_array = [
-			"a" => "b",
-			"c" => "d"
-		];
-		$non_assoc_array = [
-			"a", "b"
-		];
-		$another_assoc_array = [
-			0 => "a",
-			2 => "b"
-		];
+    public function testThatAssociativeArrayCanBeDetected()
+    {
+        $assoc_array = [
+            "a" => "b",
+            "c" => "d",
+        ];
+        $non_assoc_array = [
+            "a",
+            "b",
+        ];
+        $another_assoc_array = [
+            0 => "a",
+            2 => "b",
+        ];
 
-		//Asset true
-		$this->assertTrue(ArrayUtility::isAssoc($assoc_array));
-		$this->assertTrue(ArrayUtility::isAssoc($another_assoc_array));
-		$this->assertFalse(ArrayUtility::isAssoc($non_assoc_array));
-	}
+        //Asset true
+        $this->assertTrue(ArrayUtility::isAssoc($assoc_array));
+        $this->assertTrue(ArrayUtility::isAssoc($another_assoc_array));
+        $this->assertFalse(ArrayUtility::isAssoc($non_assoc_array));
+    }
 
-	public function testThatArrayMapsRecursively()
-	{
-		$array = [
-			"a" => " b",
-			"c" => [
-				" d",
-				"e"
-			]
-		];
-		$array2 = $array;
+    public function testThatArrayMapsRecursively()
+    {
+        $array = [
+            "a" => " b",
+            "c" => [
+                " d",
+                "e",
+            ],
+        ];
+        $array2 = $array;
 
-		//Ensure map is applied recursively
-		$this->assertEquals(["a" => "b", "c" => ["d", "e"]], ArrayUtility::mapRecursive($array, function($value){ return trim($value); }), "Trim not run recursively");
+        //Ensure map is applied recursively
+        $this->assertEquals(["a" => "b", "c" => ["d", "e"]], ArrayUtility::mapRecursive($array, function ($value) {
+            return trim($value);
+        }), "Trim not run recursively");
 
-		//Ensure array doesn't mutate
-		$this->assertEquals($array, $array2, "Array has mutated");
+        //Ensure array doesn't mutate
+        $this->assertEquals($array, $array2, "Array has mutated");
 
-		//Check that arrays can be mapped too
-		$this->assertEquals(["a" => "b", "c" => ["d", "e", "f"]], ArrayUtility::mapRecursive($array, function ($value) {
-			if (is_array($value)) {
-				return ["d", "e", "f "];
-			}
-			return trim($value);
-		}, true));
-	}
+        //Check that arrays can be mapped too
+        $this->assertEquals(["a" => "b", "c" => ["d", "e", "f"]], ArrayUtility::mapRecursive($array, function ($value) {
+            if (is_array($value)) {
+                return ["d", "e", "f "];
+            }
 
-	public function testThatMultiplePropertiesCanBeDotRead()
-	{
-		$array = [
-			"a" => "b",
-			"c" => [
-				"d" => [
-					"e" => "f",
-					"g" => [
-						"h" => "i"
-					]
-				]
-			]
-		];
+            return trim($value);
+        }, true));
+    }
 
-		$result = ArrayUtility::dotReadProperties($array, [
-			"a", "missing", "c.d.e", "c.d.g"
-		], "no");
-		$this->assertEquals([
-			"a" => "b",
-			"missing" => "no",
-			"c.d.e" => "f",
-			"c.d.g" => ["h" => "i"]
-		], $result);
-	}
+    public function testThatMultiplePropertiesCanBeDotRead()
+    {
+        $array = [
+            "a" => "b",
+            "c" => [
+                "d" => [
+                    "e" => "f",
+                    "g" => [
+                        "h" => "i",
+                    ],
+                ],
+            ],
+        ];
 
-	public function testThatKeysCanBeKept()
-	{
-		$item = ["a" => "b", "c" => "d", "e" => "f"];
+        $result = ArrayUtility::dotReadProperties($array, [
+            "a",
+            "missing",
+            "c.d.e",
+            "c.d.g",
+        ], "no");
+        $this->assertEquals([
+            "a" => "b",
+            "missing" => "no",
+            "c.d.e" => "f",
+            "c.d.g" => ["h" => "i"],
+        ], $result);
+    }
 
-		//Default action (delete)
-		$kept_keys = ArrayUtility::keepKeys($item, ["c", "a"]);
-		$this->assertEquals(["a" => "b", "c" => "d"], $kept_keys);
+    public function testThatKeysCanBeKept()
+    {
+        $item = ["a" => "b", "c" => "d", "e" => "f"];
 
-		//Explicit action (delete)
-		$kept_keys = ArrayUtility::keepKeys($item, ["a", "c"], ArrayUtility::REMOVAL_ACTION_DELETE);
-		$this->assertEquals(["a" => "b", "c" => "d"], $kept_keys);
+        //Default action (delete)
+        $kept_keys = ArrayUtility::keepKeys($item, ["c", "a"]);
+        $this->assertEquals(["a" => "b", "c" => "d"], $kept_keys);
 
-		//Nullify action
-		$kept_keys = ArrayUtility::keepKeys($item, ["a", "c"], ArrayUtility::REMOVAL_ACTION_NULLIFY);
-		$this->assertEquals(["a" => "b", "c" => "d", "e" => null], $kept_keys);
+        //Explicit action (delete)
+        $kept_keys = ArrayUtility::keepKeys($item, ["a", "c"], ArrayUtility::REMOVAL_ACTION_DELETE);
+        $this->assertEquals(["a" => "b", "c" => "d"], $kept_keys);
 
-		//Invalid actions
-		try {
-			ArrayUtility::keepKeys($item, ["a", "c"], "invalid");
-			$this->fail("Expected invalid argument exception");
-		} catch (\InvalidArgumentException $e) {
-		}
-	}
+        //Nullify action
+        $kept_keys = ArrayUtility::keepKeys($item, ["a", "c"], ArrayUtility::REMOVAL_ACTION_NULLIFY);
+        $this->assertEquals(["a" => "b", "c" => "d", "e" => null], $kept_keys);
 
-	public function testThatKeysCanBeRemoved()
-	{
-		$item = ["a" => "b", "c" => "d", "e" => "f"];
+        //Invalid actions
+        try {
+            ArrayUtility::keepKeys($item, ["a", "c"], "invalid");
+            $this->fail("Expected invalid argument exception");
+        } catch (\InvalidArgumentException $e) {
+        }
+    }
 
-		//Default action (delete)
-		$kept_keys = ArrayUtility::removeKeys($item, ["c", "a"]);
-		$this->assertEquals(["e" => "f"], $kept_keys);
+    public function testThatKeysCanBeRemoved()
+    {
+        $item = ["a" => "b", "c" => "d", "e" => "f"];
 
-		//Explicit action (delete)
-		$kept_keys = ArrayUtility::removeKeys($item, ["e"], ArrayUtility::REMOVAL_ACTION_DELETE);
-		$this->assertEquals(["a" => "b", "c" => "d"], $kept_keys);
+        //Default action (delete)
+        $kept_keys = ArrayUtility::removeKeys($item, ["c", "a"]);
+        $this->assertEquals(["e" => "f"], $kept_keys);
 
-		//Nullify action
-		$kept_keys = ArrayUtility::removeKeys($item, ["a", "c"], ArrayUtility::REMOVAL_ACTION_NULLIFY);
-		$this->assertEquals(["a" => null, "c" => null, "e" => "f"], $kept_keys);
+        //Explicit action (delete)
+        $kept_keys = ArrayUtility::removeKeys($item, ["e"], ArrayUtility::REMOVAL_ACTION_DELETE);
+        $this->assertEquals(["a" => "b", "c" => "d"], $kept_keys);
 
-		//Invalid actions
-		try {
-			ArrayUtility::removeKeys($item, ["a", "c"], "invalid");
-			$this->fail("Expected invalid argument exception");
-		} catch (\InvalidArgumentException $e) {
-		}
-	}
+        //Nullify action
+        $kept_keys = ArrayUtility::removeKeys($item, ["a", "c"], ArrayUtility::REMOVAL_ACTION_NULLIFY);
+        $this->assertEquals(["a" => null, "c" => null, "e" => "f"], $kept_keys);
 
-	public function testMapCallbackIsFired()
-	{
-		$arr = [
-			'one' => 'foo',
-		];
+        //Invalid actions
+        try {
+            ArrayUtility::removeKeys($item, ["a", "c"], "invalid");
+            $this->fail("Expected invalid argument exception");
+        } catch (\InvalidArgumentException $e) {
+        }
+    }
 
-		$mock = $this->getMockBuilder(\stdClass::class)
-            ->setMethods(['myCallback'])
-            ->getMock();
-		$mock->expects($this->once())
-			->method('myCallBack')
-			->will($this->returnValue('test'));
+    public function testMapCallbackIsFired()
+    {
+        $arr = [
+            'one' => 'foo',
+        ];
 
-		ArrayUtility::map($arr, [$mock, 'myCallBack']);
-	}
+        $mock = $this->getMockBuilder(\stdClass::class)->setMethods(['myCallback'])->getMock();
+        $mock->expects($this->once())->method('myCallBack')->will($this->returnValue('test'));
 
-	public function testMapFunctionReceivesCorrectParams()
-	{
-		$arr = [
-			'one' => 'foo',
-		];
+        ArrayUtility::map($arr, [$mock, 'myCallBack']);
+    }
 
-		ArrayUtility::map($arr, function ($value, $key, $arr) {
-			$this->assertEquals('foo', $value);
-			$this->assertEquals('one', $key);
-			$this->assertEquals(['one' => 'foo'], $arr);
-		});
-	}
+    public function testMapFunctionReceivesCorrectParams()
+    {
+        $arr = [
+            'one' => 'foo',
+        ];
 
-	public function testMapFunctionReturnsCorrectMap()
-	{
-		$arr = [
-			'one' => 'foo',
-		];
+        ArrayUtility::map($arr, function ($value, $key, $arr) {
+            $this->assertEquals('foo', $value);
+            $this->assertEquals('one', $key);
+            $this->assertEquals(['one' => 'foo'], $arr);
+        });
+    }
 
-		$result = ArrayUtility::map($arr, function ($value, $key, $arr) {
-			return ['key' => $key, 'value' => $value, 'arr' => $arr];
-		});
+    public function testMapFunctionReturnsCorrectMap()
+    {
+        $arr = [
+            'one' => 'foo',
+        ];
 
-		$expected = [
-			[
-				'key' => 'one',
-				'value' => 'foo',
-				'arr' => [
-					'one' => 'foo',
-				]
-			]
-		];
+        $result = ArrayUtility::map($arr, function ($value, $key, $arr) {
+            return ['key' => $key, 'value' => $value, 'arr' => $arr];
+        });
 
-		$this->assertEquals($expected, $result);
-	}
+        $expected = [
+            [
+                'key' => 'one',
+                'value' => 'foo',
+                'arr' => [
+                    'one' => 'foo',
+                ],
+            ],
+        ];
 
-	public function testMapReturnsEmptyArrayWithEmptyArrayInput()
-	{
-		$result = ArrayUtility::map([], function ($value, $key, $arr) {
-			return 'test';
-		});
+        $this->assertEquals($expected, $result);
+    }
 
-		$this->assertEquals([], $result);
-	}
+    public function testMapReturnsEmptyArrayWithEmptyArrayInput()
+    {
+        $result = ArrayUtility::map([], function ($value, $key, $arr) {
+            return 'test';
+        });
 
-	public function testGetFirstElement()
-	{
-		$result = ArrayUtility::first(['1', '2']);
-		$this->assertEquals('1', $result);
-	}
+        $this->assertEquals([], $result);
+    }
 
-	public function testGetFirstElementWithEmptyArray()
-	{
-		$result = ArrayUtility::first([]);
-		$this->assertEquals(null, $result);
-	}
+    public function testGetFirstElement()
+    {
+        $result = ArrayUtility::first(['1', '2']);
+        $this->assertEquals('1', $result);
+    }
 
-	public function testGetLastElement()
-	{
-		$result = ArrayUtility::last(['1', '2']);
-		$this->assertEquals('2', $result);
-	}
+    public function testGetFirstElementWithEmptyArray()
+    {
+        $result = ArrayUtility::first([]);
+        $this->assertEquals(null, $result);
+    }
 
-	public function testGetLastElementWithEmptyArray()
-	{
-		$result = ArrayUtility::last([]);
-		$this->assertEquals(null, $result);
-	}
+    public function testGetLastElement()
+    {
+        $result = ArrayUtility::last(['1', '2']);
+        $this->assertEquals('2', $result);
+    }
 
-	public function testGetFirstKeyInAssocArray()
-	{
-		$result = ArrayUtility::firstKey(['a'=>'A', 'b'=>'B']);
-		$this->assertEquals('a', $result);
-	}
+    public function testGetLastElementWithEmptyArray()
+    {
+        $result = ArrayUtility::last([]);
+        $this->assertEquals(null, $result);
+    }
 
-	public function testGetLastKeyInAssocArray()
-	{
-		$result = ArrayUtility::lastKey(['a'=>'A', 'b'=>'B']);
-		$this->assertEquals('b', $result);
-	}
+    public function testGetFirstKeyInAssocArray()
+    {
+        $result = ArrayUtility::firstKey(['a' => 'A', 'b' => 'B']);
+        $this->assertEquals('a', $result);
+    }
 
-	public function testGetFirstKeyInEmptyArray()
-	{
-		$result = ArrayUtility::firstKey([]);
-		$this->assertEquals(null, $result);
-	}
+    public function testGetLastKeyInAssocArray()
+    {
+        $result = ArrayUtility::lastKey(['a' => 'A', 'b' => 'B']);
+        $this->assertEquals('b', $result);
+    }
 
-	public function testGetLastKeyInEmptyArray()
-	{
-		$result = ArrayUtility::lastKey([]);
-		$this->assertEquals(null, $result);
-	}
+    public function testGetFirstKeyInEmptyArray()
+    {
+        $result = ArrayUtility::firstKey([]);
+        $this->assertEquals(null, $result);
+    }
 
-	public function testGetFirstKeyInArray()
-	{
-		$result = ArrayUtility::firstKey(['a', 'b']);
-		$this->assertEquals(0, $result);
-	}
+    public function testGetLastKeyInEmptyArray()
+    {
+        $result = ArrayUtility::lastKey([]);
+        $this->assertEquals(null, $result);
+    }
 
-	public function testGetLastKeyInArray()
-	{
-		$result = ArrayUtility::lastKey(['a', 'b']);
-		$this->assertEquals(1, $result);
-	}
+    public function testGetFirstKeyInArray()
+    {
+        $result = ArrayUtility::firstKey(['a', 'b']);
+        $this->assertEquals(0, $result);
+    }
+
+    public function testGetLastKeyInArray()
+    {
+        $result = ArrayUtility::lastKey(['a', 'b']);
+        $this->assertEquals(1, $result);
+    }
 }
