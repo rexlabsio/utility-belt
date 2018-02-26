@@ -2,6 +2,13 @@
 
 All notable changes to ```UtilityBelt``` will be noted in this file.
 
+## 3.0.1
+
+### Minor changes
+
+- Minor optimisations, annotations, and type declarations for >= PHP 7.0
+- Reformat code to PSR-1/PSR-2 standards
+
 ## 3.0.0
 
 ### Breaking Changes
